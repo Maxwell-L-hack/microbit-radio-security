@@ -1,11 +1,13 @@
 import gc
-import machine
+import microbit
 import radio
 import random
 
 gc.enable()
 
-def initiate_mode:
+def initiate_mode():
+
+    microbit.display.scroll('Initiating')
 
     starter_channel = 6
 
@@ -16,18 +18,24 @@ def initiate_mode:
 
     pre_shared_key = 168856323
 
-    encoded_channel_num = str(machine.unique_id() * pre_shared_key * random_channel)
+    radio.send(str(random_channel))
 
-    radio.send(encoded_channel_num)
+    radio.config(channel=random_channel, power=7)
 
-    radio.config(channel=encoded_channel_num, power=7)
-
-def recieve_mode:
+def recieve_mode():
     starter_channel = 6
 
     radio.reset()
     radio.config(channel=starter_channel, power=7)
 
     pre_shared_key = 168856323
+    new_channel = radio.receive()
 
-    decoded_channnel_num = 
+    if new_channel is not None:
+        new_channel_int = int(new_channel)
+        radio.config(channel=new_channel_int, power=7)
+        microbit.display.scroll(new_channel_int)
+
+while True:
+    if microbit.pin_logo.is_touched():
+        initiate_mode()
