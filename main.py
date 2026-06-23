@@ -22,7 +22,24 @@ def initiate_mode():
     while True:
         confirmation = radio.receive()
         if confirmation != 'ready':
-            microbit.display.scroll('W')
+            microbit.display.show(microbit.Image('00000:'
+                                                 '00000:'
+                                                 '00900:'
+                                                 '00000:'
+                                                 '00000'))
+            microbit.sleep(1000)
+            microbit.display.show(microbit.Image('00000:'
+                                                 '09990:'
+                                                 '09590:'
+                                                 '09990:'
+                                                 '00000'))
+            microbit.sleep(1000)
+            microbit.display.show(microbit.Image('99999:'
+                                                 '95559:'
+                                                 '95159:'
+                                                 '95559:'
+                                                 '99999'))
+            microbit.sleep(1000)
         elif confirmation == 'ready':
             microbit.display.scroll('Confirmation received')
             radio.config(channel=random_channel, power=7)
