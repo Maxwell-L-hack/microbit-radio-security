@@ -19,32 +19,6 @@ def initiate_mode():
     pre_shared_key = 168856323
 
     microbit.sleep(1000)
-    while True:
-        confirmation = radio.receive()
-        if confirmation != 'ready':
-            microbit.display.show(microbit.Image('00000:'
-                                                 '00000:'
-                                                 '00900:'
-                                                 '00000:'
-                                                 '00000'))
-            microbit.sleep(1000)
-            microbit.display.show(microbit.Image('00000:'
-                                                 '09990:'
-                                                 '09590:'
-                                                 '09990:'
-                                                 '00000'))
-            microbit.sleep(1000)
-            microbit.display.show(microbit.Image('99999:'
-                                                 '95559:'
-                                                 '95159:'
-                                                 '95559:'
-                                                 '99999'))
-            microbit.sleep(1000)
-        elif confirmation == 'ready':
-            microbit.display.scroll('Confirmation received')
-            radio.config(channel=random_channel, power=7)
-
-
 
 def receive_mode():
 
@@ -65,8 +39,43 @@ def receive_mode():
         microbit.display.scroll(new_channel_int)
         microbit.sleep(1000)
 
+def waiting_animation():
+    while True:
+        microbit.display.show(microbit.Image('00000:'
+                                             '00000:'
+                                             '00900:'
+                                             '00000:'
+                                             '00000'))
+        microbit.sleep(1000)
+        microbit.display.show(microbit.Image('00000:'
+                                             '09990:'
+                                             '09590:'
+                                             '09990:'
+                                             '00000'))
+        microbit.sleep(1000)
+        microbit.display.show(microbit.Image('99999:'
+                                             '95559:'
+                                             '95159:'
+                                             '95559:'
+                                             '99999'))
+
+
+def check_if_ready():
+    confirmation = radio.receive()
+
+    while confirmation != 'ready':
+        confirmation = radio.receive()
+        waiting_animation()
+
+    is_ready = 1
+    
+    if is_ready == 1:
+        microbit.display.scroll('Confirmation received')
+
 while True:
     if microbit.pin_logo.is_touched():
         initiate_mode()
     elif microbit.button_a.was_pressed():
         receive_mode()
+
+    check_if_ready()
