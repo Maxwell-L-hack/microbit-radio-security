@@ -11,14 +11,22 @@ def initiate_mode():
 
     starter_channel = 6
 
-    random_channel = random.randint(0, 83)
+    new_channel = random.randint(0, 83)
 
     radio.reset()
     radio.config(channel=starter_channel, power=7)
 
     pre_shared_key = 168856323
 
-    microbit.sleep(1000)
+    while True:
+        random_channel = random.randint(0, 83)
+        if new_channel != random_channel:
+            return new_channel = random_channel
+        elif:
+            random_channel = random.randint(0, 83)
+            return random_channel
+
+
 
 def receive_mode():
 
