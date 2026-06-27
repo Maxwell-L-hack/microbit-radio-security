@@ -21,8 +21,9 @@ def initiate_mode():
     while True:
         random_channel = random.randint(0, 83)
         if new_channel != random_channel:
-            return new_channel = random_channel
-        elif:
+            new_channel = random_channel
+            return new_channel
+        else:
             random_channel = random.randint(0, 83)
             return random_channel
 
