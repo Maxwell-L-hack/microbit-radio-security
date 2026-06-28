@@ -67,6 +67,7 @@ def waiting_animation():
                                              '95159:'
                                              '95559:'
                                              '99999'))
+        microbit.sleep(1000)
 
 
 def check_if_ready():
@@ -84,7 +85,6 @@ def check_if_ready():
 while True:
     if microbit.pin_logo.is_touched():
         initiate_mode()
+        check_if_ready()
     elif microbit.button_a.was_pressed():
         receive_mode()
-
-    check_if_ready()
