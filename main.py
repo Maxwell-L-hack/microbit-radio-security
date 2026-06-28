@@ -18,14 +18,14 @@ def initiate_mode():
 
     pre_shared_key = 168856323
 
-    while True:
-        random_channel = random.randint(0, 83)
-        if new_channel != random_channel:
-            new_channel = random_channel
-            return new_channel
-        else:
-            random_channel = random.randint(0, 83)
-            return random_channel
+    #while True:
+        #random_channel = random.randint(0, 83)
+        #if new_channel != random_channel:
+        #    new_channel = random_channel
+        #    return new_channel
+        #else:
+        #    random_channel = random.randint(0, 83)
+        #    return random_channel
 
 
 
@@ -41,12 +41,12 @@ def receive_mode():
     pre_shared_key = 168856323
     new_channel = radio.receive()
 
-    while new_channel is not None:
+    while True:
         radio.send('ready')
-        new_channel_int = int(new_channel)
-        radio.config(channel=new_channel_int, power=7)
-        microbit.display.scroll(new_channel_int)
-        microbit.sleep(1000)
+        #new_channel_int = int(new_channel)
+        #radio.config(channel=new_channel_int, power=7)
+        #microbit.display.scroll(new_channel_int)
+        #microbit.sleep(1000)
 
 def waiting_animation():
     while True:
@@ -71,16 +71,18 @@ def waiting_animation():
 
 
 def check_if_ready():
-    confirmation = radio.receive()
-
-    while confirmation != 'ready':
+    while True:
         confirmation = radio.receive()
-        waiting_animation()
+        microbit.display.scroll(str(confirmation))
 
-    is_ready = 1
-    
-    if is_ready == 1:
-        microbit.display.scroll('Confirmation received')
+    #while confirmation != 'ready':
+    #    confirmation = radio.receive()
+    #    waiting_animation()
+#
+    #is_ready = 1
+    #
+    #if is_ready == 1:
+    #    microbit.display.scroll('Confirmation received')
 
 while True:
     if microbit.pin_logo.is_touched():
