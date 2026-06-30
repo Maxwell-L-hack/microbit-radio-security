@@ -5,29 +5,25 @@ import random
 
 gc.enable()
 
+pre_shared_key = 168856323
+
+current_channel = 6
+
 def initiate_mode():
 
     microbit.display.scroll('Initiating')
 
-    starter_channel = 6
-
     new_channel = random.randint(0, 83)
 
     radio.reset()
-    radio.config(channel=starter_channel, power=7)
-
-    pre_shared_key = 168856323
+    radio.config(channel=current_channel, power=7)
 
 def receive_mode():
 
     microbit.display.scroll('Receiving')
 
-    starter_channel = 6
-
     radio.reset()
-    radio.config(channel=starter_channel, power=7)
-
-    pre_shared_key = 168856323
+    radio.config(channel=current_channel, power=7)
     new_channel = radio.receive()
 
     while True:
@@ -54,11 +50,21 @@ def waiting_animation():
                                              '99999'))
         microbit.sleep(1000)
 
+def on_ready():
+    new_channel = random.randint(0,83)
+    while True:
+        if new_channel == current_channel:
+            new_channel = random.randint(0,83)
+        else:
+            global current_channel = new_channel
+
+    radio.config(channel=current_channel, power=7)
 
 def check_if_ready():
     while True:
         confirmation = radio.receive()
         microbit.display.scroll(str(confirmation))
+        on_ready()
 
 while True:
     if microbit.pin_logo.is_touched():
