@@ -56,15 +56,13 @@ def on_ready():
         if new_channel == current_channel:
             new_channel = random.randint(0,83)
         else:
-            global current_channel = new_channel
-
-    radio.config(channel=current_channel, power=7)
+            current_channel = new_channel
+            radio.config(channel=current_channel, power=7)
 
 def check_if_ready():
     while True:
         confirmation = radio.receive()
         microbit.display.scroll(str(confirmation))
-        on_ready()
 
 while True:
     if microbit.pin_logo.is_touched():
