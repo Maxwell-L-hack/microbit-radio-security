@@ -26,8 +26,9 @@ def receive_mode():
     radio.config(channel=current_channel, power=7)
     new_channel = radio.receive()
 
-    while True:
+    for i in range(11):
         radio.send('ready')
+        microbit.sleep(1000)
 
 def waiting_animation():
     while True:
