@@ -61,9 +61,14 @@ def on_ready():
             radio.config(channel=current_channel, power=7)
 
 def check_if_ready():
-    while True:
+    for i in range(21):
         confirmation = radio.receive()
         microbit.display.scroll(str(confirmation))
+        microbit.sleep(1000)
+        if str(confirmation) == 'ready':
+            on_ready()
+        else:
+            pass
 
 while True:
     if microbit.pin_logo.is_touched():
