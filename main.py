@@ -51,14 +51,17 @@ def waiting_animation():
                                              '99999'))
         microbit.sleep(1000)
 
-def on_ready():
+def init_channel_hop():
+    microbit.display.scroll('hop')
     new_channel = random.randint(0,83)
-    while True:
-        if new_channel == current_channel:
-            new_channel = random.randint(0,83)
-        else:
-            current_channel = new_channel
-            radio.config(channel=current_channel, power=7)
+    for i in range(11):
+        radio.send(str(new_channel))
+        microbit.sleep(1000)
+    radio.config(channel=new_channel, power=7)
+    for i in range(11):
+        check_hopped = radio.receive()
+        if str(check_hopped) == 'hopped':
+            microbit.display.scroll(str(check_hopped))
 
 def check_if_ready():
     for i in range(21):
@@ -66,13 +69,23 @@ def check_if_ready():
         microbit.display.scroll(str(confirmation))
         microbit.sleep(1000)
         if str(confirmation) == 'ready':
-            on_ready()
+            init_channel_hop()
         else:
             pass
 
+def rec_channel_hop():
+    for i in range(11):
+        new_channel = str(radio.receive())
+        microbit.sleep(1000)
+    microbit.display.scroll(new_channel)
+    radio.config(channel=int(new_channel), power=7)
+    for i in range(11):
+        radio.send('hopped')
+        microbit.sleep(1000)
 while True:
     if microbit.pin_logo.is_touched():
         initiate_mode()
         check_if_ready()
     elif microbit.button_a.was_pressed():
         receive_mode()
+        rec_channel_hop()
