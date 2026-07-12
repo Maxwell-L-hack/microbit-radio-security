@@ -13,8 +13,6 @@ def initiate_mode():
 
     microbit.display.scroll('Initiating')
 
-    new_channel = random.randint(0, 83)
-
     radio.reset()
     radio.config(channel=current_channel, power=7)
 
@@ -25,10 +23,6 @@ def receive_mode():
     radio.reset()
     radio.config(channel=current_channel, power=7)
     new_channel = radio.receive()
-
-    for i in range(11):
-        radio.send('ready')
-        microbit.sleep(1000)
 
 def waiting_animation():
     while True:
@@ -54,6 +48,7 @@ def waiting_animation():
 def init_channel_hop():
     microbit.display.scroll('hop')
     new_channel = random.randint(0,83)
+    enc_new_channel = new_channel * pre_shared_key
     for i in range(11):
         radio.send(str(new_channel))
         microbit.sleep(1000)
@@ -75,13 +70,18 @@ def check_if_ready():
 
 def rec_channel_hop():
     for i in range(11):
+        radio.send('ready')
+        microbit.sleep(1000)
+    for i in range(11):
         new_channel = str(radio.receive())
+        dec_new_channel = int(new_channel) / pre_shared_key
         microbit.sleep(1000)
     microbit.display.scroll(new_channel)
-    radio.config(channel=int(new_channel), power=7)
+    radio.config(channel=int(dec_new_channel), power=7)
     for i in range(11):
         radio.send('hopped')
         microbit.sleep(1000)
+
 while True:
     if microbit.pin_logo.is_touched():
         initiate_mode()
