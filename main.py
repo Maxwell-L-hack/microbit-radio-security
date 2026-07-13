@@ -53,18 +53,19 @@ def init_channel_hop():
         radio.send(str(new_channel))
         microbit.sleep(1000)
     radio.config(channel=new_channel, power=7)
-    for i in range(11):
+    for i in range(6):
         check_hopped = radio.receive()
         if str(check_hopped) == 'hopped':
             microbit.display.scroll(str(check_hopped))
 
 def check_if_ready():
-    for i in range(21):
+    for i in range(11):
         confirmation = radio.receive()
         microbit.display.scroll(str(confirmation))
         microbit.sleep(1000)
         if str(confirmation) == 'ready':
             init_channel_hop()
+            break
         else:
             pass
 
@@ -74,18 +75,39 @@ def rec_channel_hop():
         microbit.sleep(1000)
     for i in range(11):
         new_channel = str(radio.receive())
-        dec_new_channel = int(new_channel) / pre_shared_key
         microbit.sleep(1000)
     microbit.display.scroll(new_channel)
-    radio.config(channel=int(dec_new_channel), power=7)
+    radio.config(channel=int(new_channel), power=7)
     for i in range(11):
         radio.send('hopped')
         microbit.sleep(1000)
+
+def rec_infinite_channel_hop():
+    while True:
+        for i in range(11):
+            new_channel = str(radio.receive())
+            microbit.display.scroll(str(new_channel))
+        for i in range(11):
+            radio.send('ready')
+        radio.config(channel=int(new_channel), power=7)
+
+def init_infinite_channel_hop():
+    while True:
+        new_channel = random.randint(0, 83)
+        microbit.display.scroll(str(new_channel))
+        for i in range(11):
+            radio.send(str(new_channel))
+            microbit.sleep(1000)
+        check_if_ready()
+        radio.config(channel=int(str(new_channel)), power=7)
+
 
 while True:
     if microbit.pin_logo.is_touched():
         initiate_mode()
         check_if_ready()
+        init_infinite_channel_hop()
     elif microbit.button_a.was_pressed():
         receive_mode()
         rec_channel_hop()
+        rec_infinite_channel_hop()
