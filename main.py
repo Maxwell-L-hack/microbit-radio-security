@@ -48,7 +48,7 @@ def waiting_animation():
 def init_channel_hop():
     microbit.display.scroll('hop')
     new_channel = random.randint(0,83)
-    enc_new_channel = new_channel * pre_shared_key
+    enc_new_channel = new_channel + pre_shared_key
     for i in range(11):
         radio.send(str(new_channel))
         microbit.sleep(1000)
@@ -82,6 +82,18 @@ def rec_channel_hop():
         radio.send('hopped')
         microbit.sleep(1000)
 
+def check_if_ready_for_infinite():
+    for i in range(11):
+        confirmation = radio.receive()
+        microbit.display.scroll(str(confirmation))
+        microbit.sleep(1000)
+        if str(confirmation) == 'ready':
+            for i in range(11):
+                radio.send('hop')
+            break
+        else:
+            pass
+
 def rec_infinite_channel_hop():
     while True:
         for i in range(11):
@@ -89,16 +101,24 @@ def rec_infinite_channel_hop():
             microbit.display.scroll(str(new_channel))
         for i in range(11):
             radio.send('ready')
+        for i in range(11):
+            hop_check = radio.receive()
+            if str(hop_check) == 'hop':
+                microbit.display.scroll(str(hop_check))
+                break
+            else:
+                pass
+
         radio.config(channel=int(new_channel), power=7)
 
 def init_infinite_channel_hop():
     while True:
         new_channel = random.randint(0, 83)
         microbit.display.scroll(str(new_channel))
+        check_if_ready_for_infinite()
         for i in range(11):
             radio.send(str(new_channel))
             microbit.sleep(1000)
-        check_if_ready()
         radio.config(channel=int(str(new_channel)), power=7)
 
 
