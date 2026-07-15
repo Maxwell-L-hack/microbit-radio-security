@@ -109,7 +109,7 @@ def rec_infinite_channel_hop():
             else:
                 pass
 
-        radio.config(channel=int(new_channel), power=7)
+#        radio.config(channel=int(new_channel), power=7)
 
 def init_infinite_channel_hop():
     while True:
@@ -119,7 +119,7 @@ def init_infinite_channel_hop():
         for i in range(11):
             radio.send(str(new_channel))
             microbit.sleep(1000)
-        radio.config(channel=int(str(new_channel)), power=7)
+#        radio.config(channel=int(str(new_channel)), power=7)
 
 
 while True:
